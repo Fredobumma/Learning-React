@@ -1,11 +1,12 @@
 import React, { Component } from "react";
 import Joi from "joi-browser";
 import Input from "./input";
+import DropDownlist from "./dropDownList";
 
 class Form extends Component {
   state = { data: {}, errors: {} };
 
-  renderInput(id, label, type, autoComplete) {
+  renderInput(id, label, type, autoComplete, autoFocus) {
     const { data, errors } = this.state;
 
     return (
@@ -15,11 +16,26 @@ class Form extends Component {
         value={data[id]}
         type={type}
         autoComplete={autoComplete}
+        autoFocus={autoFocus}
         error={errors[id]}
         onChange={this.handleChange}
       />
     );
   }
+
+  renderDropDownList = (id, label, ...rest) => {
+    const { data, errors } = this.state;
+    return (
+      <DropDownlist
+        id={id}
+        label={label}
+        value={data[id]}
+        error={errors[id]}
+        options={rest}
+        onChange={this.handleChange}
+      />
+    );
+  };
 
   renderButton(label) {
     return (

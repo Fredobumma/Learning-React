@@ -79,9 +79,7 @@ export function saveMovie(movie) {
   let movieInDb = movies.find((m) => m._id === movie._id) || {};
   movieInDb.title = movie.title;
   movieInDb.genre = {
-    ...genresAPI.genres.find(
-      (g) => g.name === (movie.genre.name || movie.genre)
-    ),
+    ...genresAPI.genres.find((g) => g.name === movie.genre),
   };
   movieInDb.numberInStock = movie.numberInStock;
   movieInDb.dailyRentalRate = movie.dailyRentalRate;

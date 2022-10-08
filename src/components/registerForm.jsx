@@ -23,7 +23,7 @@ class RegisterForm extends Form {
       <div>
         <h1>Register</h1>
         <form className="mt-5 w-75" onSubmit={this.handleSubmit}>
-          {this.renderInput("name", "Name", "text", "name")}
+          {this.renderInput("name", "Name", "text", "name", "on")}
           {this.renderInput("email", "E-mail", "email", "email")}
           {this.renderInput("password", "Password", "password", "new-password")}
           {this.renderButton("Register")}

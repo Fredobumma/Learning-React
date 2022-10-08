@@ -1,38 +1,25 @@
-import React, { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import React from "react";
 import Joi from "joi-browser";
-import { isString } from "lodash";
-import HooksForm from "./common/hooksForm";
+import Form from "./common/form";
 import { getMovie, saveMovie } from "./../services/fakeMovieService";
 import { getGenres } from "../services/fakeGenreService";
+import { getParams } from "../utilities/getParams";
 
-const MovieForm = () => {
-  const form = new HooksForm();
-  const { id } = useParams();
-  const navigate = useNavigate();
-  const existingMovie = getMovie(id);
-
-  const [movie, setMovie] = useState(
-    existingMovie || {
+class MovieForm extends Form {
+  state = {
+    data: {
       title: "",
       genre: "",
       numberInStock: "",
       dailyRentalRate: "",
-    }
-  );
-  const [errors, setErrors] = useState({});
+    },
+    errors: {},
+  };
 
-  form.data = movie;
-  form.errors = errors;
-  form.setData = setMovie;
-  form.setErrors = setErrors;
-
-  form.schema = {
+  schema = {
     _id: Joi.optional(),
     title: Joi.string().max(30).required().label("Title"),
-    genre: isString(movie.genre)
-      ? Joi.string().required().label("Genre")
-      : Joi.any(),
+    genre: Joi.string().required().label("Genre"),
     numberInStock: Joi.number()
       .integer()
       .min(0)
@@ -47,33 +34,63 @@ const MovieForm = () => {
     publishDate: Joi.optional(),
   };
 
-  form.doSubmit = () => {
-    saveMovie(movie);
-    navigate("/movies");
+  componentDidMount() {
+    const {
+      params: { id },
+    } = this.props;
+    const existingMovie = getMovie(id);
+    const data = existingMovie
+      ? this.mapToViewModel(existingMovie)
+      : this.state.data;
+
+    // if (!existingMovie && id !== "new")
+    //   return navigate("/not-found", "replace");
+
+    this.setState({ data });
+  }
+
+  mapToViewModel(movie) {
+    return {
+      title: movie.title,
+      genre: movie.genre.name,
+      numberInStock: movie.numberInStock,
+      dailyRentalRate: movie.dailyRentalRate,
+    };
+  }
+
+  render() {
+    const {
+      params: { id },
+    } = this.props;
+    return (
+      <div>
+        <h1>Movie Form {id === "new" ? null : id}</h1>
+        <form className="mt-5 w-75" onSubmit={this.handleSubmit}>
+          {this.renderInput(
+            "title",
+            "Title",
+            "text",
+            "organization-title",
+            "on"
+          )}
+          {this.renderDropDownList(
+            "genre",
+            "Genre",
+            "",
+            ...getGenres().map((g) => g.name)
+          )}
+          {this.renderInput("dailyRentalRate", "Rate", "number", "on")}
+          {this.renderInput("numberInStock", "Number in Stock", "number", "on")}
+          {this.renderButton("Save")}
+        </form>
+      </div>
+    );
+  }
+
+  doSubmit = () => {
+    saveMovie(this.state.data);
+    // navigate("/movies");
   };
+}
 
-  useEffect(() => {
-    if (!existingMovie && id !== "new")
-      return navigate("/not-found", "replace");
-  });
-
-  return (
-    <div>
-      <h1>Movie Form {id === "new" ? null : id}</h1>
-      <form className="mt-5 w-75" onSubmit={form.handleSubmit}>
-        {form.renderInput("title", "Title", "text", "organization-title", "on")}
-        {form.renderDropDownList(
-          "genre",
-          "Genre",
-          "",
-          ...getGenres().map((g) => g.name)
-        )}
-        {form.renderInput("dailyRentalRate", "Rate", "number", "on")}
-        {form.renderInput("numberInStock", "Number in Stock", "number", "on")}
-        {form.renderButton("Save")}
-      </form>
-    </div>
-  );
-};
-
-export default MovieForm;
+export default getParams(MovieForm);
