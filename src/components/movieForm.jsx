@@ -3,7 +3,7 @@ import Joi from "joi-browser";
 import Form from "./common/form";
 import { getMovie, saveMovie } from "./../services/fakeMovieService";
 import { getGenres } from "../services/fakeGenreService";
-import { getParams } from "../utilities/getParams";
+import { getHooks } from "../utilities/getHooks";
 
 class MovieForm extends Form {
   state = {
@@ -37,20 +37,26 @@ class MovieForm extends Form {
   componentDidMount() {
     const {
       params: { id },
+      navigate,
     } = this.props;
+
     const existingMovie = getMovie(id);
     const data = existingMovie
       ? this.mapToViewModel(existingMovie)
       : this.state.data;
 
-    // if (!existingMovie && id !== "new")
-    //   return navigate("/not-found", "replace");
+    if (!existingMovie && id !== "new") {
+      return setTimeout(() => {
+        navigate("/not-found", "replace");
+      }, 0);
+    }
 
     this.setState({ data });
   }
 
   mapToViewModel(movie) {
     return {
+      _id: movie._id,
       title: movie.title,
       genre: movie.genre.name,
       numberInStock: movie.numberInStock,
@@ -62,6 +68,7 @@ class MovieForm extends Form {
     const {
       params: { id },
     } = this.props;
+
     return (
       <div>
         <h1>Movie Form {id === "new" ? null : id}</h1>
@@ -89,8 +96,8 @@ class MovieForm extends Form {
 
   doSubmit = () => {
     saveMovie(this.state.data);
-    // navigate("/movies");
+    this.props.navigate("/movies");
   };
 }
 
-export default getParams(MovieForm);
+export default getHooks(MovieForm);
