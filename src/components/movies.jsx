@@ -6,7 +6,7 @@ import { deleteMovie, getMovies } from "../services/fakeMovieService";
 import Pagination from "./common/pagination";
 import { autoPaginate, paginate } from "../utilities/paginate";
 import ListGroup from "./common/ListGroup";
-import { getGenres } from "../services/fakeGenreService";
+import { genresEndpoint } from "../services/genreService";
 import SearchBox from "./common/searchBox";
 
 class Movies extends Component {
@@ -23,8 +23,9 @@ class Movies extends Component {
     },
   };
 
-  componentDidMount() {
-    const genres = [{ _id: "", name: "All Genres" }, ...getGenres()];
+  async componentDidMount() {
+    const { data: getGenres } = await genresEndpoint();
+    const genres = [{ _id: "", name: "All Genres" }, ...getGenres];
     this.setState({ movies: getMovies(), genres });
   }
 
