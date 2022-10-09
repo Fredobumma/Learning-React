@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import Joi from "joi-browser";
 import Input from "./input";
-import DropDownlist from "./dropDownList";
+import SelectOptions from "./selectOptions";
 
 class Form extends Component {
   state = { data: {}, errors: {} };
@@ -26,7 +26,7 @@ class Form extends Component {
   renderDropDownList = (id, label, ...rest) => {
     const { data, errors } = this.state;
     return (
-      <DropDownlist
+      <SelectOptions
         id={id}
         label={label}
         value={data[id]}

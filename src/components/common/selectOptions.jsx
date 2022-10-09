@@ -1,6 +1,6 @@
 import React from "react";
 
-const DropDownlist = ({ id, label, error, options, ...rest }) => {
+const SelectOptions = ({ id, label, error, options, ...rest }) => {
   return (
     <div className="mb-3">
       <label htmlFor={id} className="form-label">
@@ -18,4 +18,4 @@ const DropDownlist = ({ id, label, error, options, ...rest }) => {
   );
 };
 
-export default DropDownlist;
+export default SelectOptions;
