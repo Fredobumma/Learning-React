@@ -1,6 +1,6 @@
 import http from "./httpService";
 import config from "../config/config.json";
 
-export function genresEndpoint() {
-  return http.get(config.genresApiEndpoint);
+export function moviesEndpoint() {
+  return http.get(config.moviesApiEndpoint);
 }
