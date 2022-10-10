@@ -2,11 +2,12 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import _ from "lodash";
 import MoviesTable from "./moviesTable";
-import { deleteMovie, getMovies } from "../services/fakeMovieService";
+import { deleteMovie } from "../services/fakeMovieService";
 import Pagination from "./common/pagination";
 import { autoPaginate, paginate } from "../utilities/paginate";
 import ListGroup from "./common/ListGroup";
 import { genresEndpoint } from "../services/genreService";
+import { moviesEndpoint } from "../services/movieService";
 import SearchBox from "./common/searchBox";
 
 class Movies extends Component {
@@ -25,8 +26,9 @@ class Movies extends Component {
 
   async componentDidMount() {
     const { data: getGenres } = await genresEndpoint();
+    const { data: getMovies } = await moviesEndpoint();
     const genres = [{ _id: "", name: "All Genres" }, ...getGenres];
-    this.setState({ movies: getMovies(), genres });
+    this.setState({ movies: getMovies, genres });
   }
 
   handleGenreSelect = (genre) => {
