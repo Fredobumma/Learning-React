@@ -1,13 +1,13 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
 import _ from "lodash";
+import { getGenres } from "../services/genreService";
+import { getMovies, deleteMovie } from "../services/movieService";
 import MoviesTable from "./moviesTable";
-import { deleteMovie } from "../services/fakeMovieService";
 import Pagination from "./common/pagination";
 import { autoPaginate, paginate } from "../utilities/paginate";
 import ListGroup from "./common/ListGroup";
-import { getGenres } from "../services/genreService";
-import { getMovies } from "../services/movieService";
 import SearchBox from "./common/searchBox";
 
 class Movies extends Component {
@@ -59,12 +59,20 @@ class Movies extends Component {
     this.setState({ movies });
   };
 
-  handleDelete = (movie) => {
-    deleteMovie(movie._id);
+  handleDelete = async (movie) => {
     const { movies: allMovies, currentPage: activePage, pageSize } = this.state;
     const movies = allMovies.filter((m) => m._id !== movie._id);
     const currentPage = autoPaginate(movies, activePage, pageSize);
     this.setState({ currentPage, movies });
+
+    try {
+      await deleteMovie(movie._id);
+    } catch (error) {
+      if (error.response && error.response.status === 404)
+        toast.error("post is invalid and cannot be deleted");
+
+      this.setState({ movies: allMovies, currentPage: activePage });
+    }
   };
 
   handlePageChange = (page) => {

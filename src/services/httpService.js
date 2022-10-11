@@ -10,7 +10,7 @@ axios.interceptors.response.use(null, (error) => {
 
   if (!expectedError) {
     logger.log(error);
-    toast("An unkown error occurred");
+    toast.error("An unkown error occurred");
   }
 
   return Promise.reject(error);

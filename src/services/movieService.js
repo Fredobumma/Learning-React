@@ -10,10 +10,13 @@ export function getMovie(movieId) {
 }
 
 export function saveMovie(movie) {
-  console.log(`${config.apiUrl}/movies`);
   return http.post(`${config.apiUrl}/movies`, movie);
 }
 
 export function updateMovie(movie, movieId) {
   return http.put(`${config.apiUrl}/movies/${movieId}`, movie);
+}
+
+export function deleteMovie(movieId) {
+  return http.delete(`${config.apiUrl}/movies/${movieId}`);
 }
