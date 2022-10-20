@@ -1,6 +1,8 @@
 import React from "react";
 import Joi from "joi-browser";
 import Form from "./common/form";
+import { register } from "../services/userService";
+import { getHooks } from "../utilities/getHooks";
 
 class RegisterForm extends Form {
   state = {
@@ -23,8 +25,8 @@ class RegisterForm extends Form {
       <div>
         <h1>Register</h1>
         <form className="mt-5 w-75" onSubmit={this.handleSubmit}>
-          {this.renderInput("name", "Name", "text", "name", "on")}
           {this.renderInput("email", "E-mail", "email", "email")}
+          {this.renderInput("name", "Name", "text", "name", "on")}
           {this.renderInput("password", "Password", "password", "new-password")}
           {this.renderButton("Register")}
         </form>
@@ -32,9 +34,19 @@ class RegisterForm extends Form {
     );
   }
 
-  doSubmit() {
-    console.log("Registered");
-  }
+  doSubmit = async () => {
+    try {
+      const { headers } = await register(this.state.data);
+      localStorage.setItem("token", headers["x-auth-token"]);
+      this.props.navigate("/");
+    } catch (error) {
+      if (error.response && error.response.status === 400) {
+        const errors = { ...this.state.errors };
+        errors.email = error.response.data;
+        this.setState({ errors });
+      }
+    }
+  };
 }
 
-export default RegisterForm;
+export default getHooks(RegisterForm);
