@@ -7,15 +7,18 @@ const NavBar = ({ user }) => {
     { label: "Customers", path: "/customers" },
     { label: "Rentals", path: "/rentals" },
   ];
-  const anonymousUser = [
-    { label: "Register", path: "/register" },
-    { label: "Login", path: "/login" },
-  ];
-  const registeredUser = [
-    { label: user, path: "/profile" },
-    { label: "Logout", path: "/logout" },
-  ];
-  user ? navLinks.push(...registeredUser) : navLinks.push(...anonymousUser);
+
+  if (user) {
+    navLinks.push(
+      { label: user.name, path: "/profile" },
+      { label: "Logout", path: "/logout" }
+    );
+  } else {
+    navLinks.push(
+      { label: "Register", path: "/register" },
+      { label: "Login", path: "/login" }
+    );
+  }
 
   return (
     <nav className="navbar navbar-expand-lg bg-light">

@@ -1,16 +1,17 @@
 import React, { Component } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
-import jwtDecode from "jwt-decode";
 import NavBar from "./components/navbar";
 import Movies from "./components/movies";
 import Customers from "./components/customers";
 import Rentals from "./components/rentals";
+import Profile from "./components/profile";
 import NotFound from "./components/not-found";
 import MovieForm from "./components/movieForm";
 import RegisterForm from "./components/registerForm";
 import LoginForm from "./components/loginForm";
 import Logout from "./components/logout";
+import * as auth from "./services/authService";
 import "react-toastify/dist/ReactToastify.css";
 import "./App.css";
 
@@ -18,11 +19,8 @@ class App extends Component {
   state = {};
 
   componentDidMount() {
-    try {
-      const jwt = localStorage.getItem("token");
-      const user = jwtDecode(jwt);
-      this.setState({ user: user.name });
-    } catch (error) {}
+    const user = auth.getCurrentUser();
+    this.setState({ user });
   }
 
   render() {
@@ -37,6 +35,7 @@ class App extends Component {
             <Route path="/rentals" element={<Rentals />} />
             <Route path="/movies" element={<Movies />} />
             <Route path="/movies/:id" element={<MovieForm />} />
+            <Route path="/profile" element={<Profile />} />
             <Route path="/register" element={<RegisterForm />} />
             <Route path="/login" element={<LoginForm />} />
             <Route path="/logout" element={<Logout />} />

@@ -1,8 +1,7 @@
 import React from "react";
 import Joi from "joi-browser";
 import Form from "./common/form";
-import { login } from "../services/authService";
-import { getHooks } from "./../utilities/getHooks";
+import * as auth from "../services/authService";
 
 class LoginForm extends Form {
   state = {
@@ -36,19 +35,28 @@ class LoginForm extends Form {
     );
   }
 
+  getErrors(error) {
+    const { data, errors: errorsObj } = this.state;
+    const errors = { ...errorsObj };
+    const errorsProperty = Object.keys(data).filter((el) =>
+      error.response.data.includes(el)
+    )[0];
+    errors[errorsProperty] = error.response.data;
+    return errors;
+  }
+
   doSubmit = async () => {
     try {
-      const { data } = await login(this.state.data);
-      localStorage.setItem("token", data);
-      this.props.navigate("/");
+      const { data } = await auth.login(this.state.data);
+      auth.loginWithJwt(data);
+      window.location = "/";
     } catch (error) {
       if (error.response && error.response.status === 400) {
-        const errors = { ...this.state.errors };
-        errors.email = error.response.data;
+        const errors = this.getErrors(error);
         this.setState({ errors });
       }
     }
   };
 }
 
-export default getHooks(LoginForm);
+export default LoginForm;

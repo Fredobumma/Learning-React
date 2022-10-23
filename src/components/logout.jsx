@@ -1,10 +1,10 @@
 import { Component } from "react";
-import { getHooks } from "../utilities/getHooks";
+import * as auth from "../services/authService";
 
 class Logout extends Component {
   componentDidMount() {
-    localStorage.removeItem("token");
-    this.props.navigate("/");
+    auth.logout();
+    window.location = "/";
   }
 
   render() {
@@ -12,4 +12,4 @@ class Logout extends Component {
   }
 }
 
-export default getHooks(Logout);
+export default Logout;
