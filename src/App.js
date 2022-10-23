@@ -7,8 +7,9 @@ import Customers from "./components/customers";
 import Rentals from "./components/rentals";
 import NotFound from "./components/not-found";
 import MovieForm from "./components/movieForm";
-import LoginForm from "./components/loginForm";
 import RegisterForm from "./components/registerForm";
+import LoginForm from "./components/loginForm";
+import Logout from "./components/logout";
 import "react-toastify/dist/ReactToastify.css";
 import "./App.css";
 
@@ -24,8 +25,9 @@ function App() {
           <Route path="/rentals" element={<Rentals />} />
           <Route path="/movies" element={<Movies />} />
           <Route path="/movies/:id" element={<MovieForm />} />
-          <Route path="/login" element={<LoginForm />} />
           <Route path="/register" element={<RegisterForm />} />
+          <Route path="/login" element={<LoginForm />} />
+          <Route path="/logout" element={<Logout />} />
           <Route path="/not-found" element={<NotFound />} />
           <Route path="/" element={<Navigate to="/movies" />} />
           <Route path="*" element={<Navigate to="/not-found" />} />

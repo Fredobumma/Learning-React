@@ -6,8 +6,9 @@ const NavBar = () => {
     { label: "Movies", path: "/movies" },
     { label: "Customers", path: "/customers" },
     { label: "Rentals", path: "/rentals" },
-    { label: "Login", path: "/login" },
     { label: "Register", path: "/register" },
+    { label: "Login", path: "/login" },
+    { label: "Logout", path: "/logout" },
   ];
 
   return (
