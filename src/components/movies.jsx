@@ -115,6 +115,7 @@ class Movies extends Component {
       sortColumn,
       searchValue,
     } = this.state;
+    const { user } = this.props;
 
     const { totalCount, movies } = this.getPagedData();
 
@@ -137,9 +138,11 @@ class Movies extends Component {
           />
         </div>
         <div className="col">
-          <Link to="/movies/new" className="btn btn-primary mb-4">
-            New Movie
-          </Link>
+          {user && (
+            <Link to="/movies/new" className="btn btn-primary mb-4">
+              New Movie
+            </Link>
+          )}
           <p>Showing {totalCount} movie(s) in the database.</p>
           <SearchBox
             extraClasses="w-75 mb-3"

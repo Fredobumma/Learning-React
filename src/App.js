@@ -22,21 +22,28 @@ class App extends Component {
     const user = auth.getCurrentUser();
     this.setState({ user });
   }
+
   x;
   y;
+  z;
 
   render() {
+    const { user } = this.state;
+
     return (
       <React.Fragment>
         <ToastContainer />
-        <NavBar user={this.state.user} />
+        <NavBar user={user} />
         <main className="container">
           <Routes>
-            <Route path="/movies" element={<Movies />} />
+            <Route path="/movies" element={<Movies user={user} />} />
             <Route path="/customers" element={<Customers />} />
             <Route path="/rentals" element={<Rentals />} />
             <Route path="/movies" element={<Movies />} />
-            <Route path="/movies/:id" element={<MovieForm />} />
+            <Route
+              path="/movies/:id"
+              element={(user && <MovieForm />) || <Navigate to="/login" />}
+            />
             <Route path="/profile" element={<Profile />} />
             <Route path="/register" element={<RegisterForm />} />
             <Route path="/login" element={<LoginForm />} />
