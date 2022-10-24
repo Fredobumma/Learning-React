@@ -2,6 +2,7 @@ import React from "react";
 import Joi from "joi-browser";
 import Form from "./common/form";
 import * as auth from "../services/authService";
+import { getHooks } from "./../utilities/getHooks";
 
 class LoginForm extends Form {
   state = {
@@ -49,7 +50,9 @@ class LoginForm extends Form {
     try {
       const { data } = await auth.login(this.state.data);
       auth.loginWithJwt(data);
-      window.location = "/";
+
+      const { state } = this.props.location;
+      window.location = state ? state.from.pathname : "/";
     } catch (error) {
       if (error.response && error.response.status === 400) {
         const errors = this.getErrors(error);
@@ -59,4 +62,4 @@ class LoginForm extends Form {
   };
 }
 
-export default LoginForm;
+export default getHooks(LoginForm);

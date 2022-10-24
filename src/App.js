@@ -12,6 +12,7 @@ import RegisterForm from "./components/registerForm";
 import LoginForm from "./components/loginForm";
 import Logout from "./components/logout";
 import * as auth from "./services/authService";
+import { getHooks } from "./utilities/getHooks";
 import "react-toastify/dist/ReactToastify.css";
 import "./App.css";
 
@@ -23,12 +24,9 @@ class App extends Component {
     this.setState({ user });
   }
 
-  x;
-  y;
-  z;
-
   render() {
     const { user } = this.state;
+    const { location } = this.props;
 
     return (
       <React.Fragment>
@@ -42,11 +40,21 @@ class App extends Component {
             <Route path="/movies" element={<Movies />} />
             <Route
               path="/movies/:id"
-              element={(user && <MovieForm />) || <Navigate to="/login" />}
+              element={
+                (auth.getCurrentUser() && <MovieForm />) || (
+                  <Navigate to="/login" state={{ from: location }} />
+                )
+              }
             />
             <Route path="/profile" element={<Profile />} />
-            <Route path="/register" element={<RegisterForm />} />
-            <Route path="/login" element={<LoginForm />} />
+            <Route
+              path="/register"
+              element={(!user && <RegisterForm />) || <Navigate to="/" />}
+            />
+            <Route
+              path="/login"
+              element={(!user && <LoginForm />) || <Navigate to="/" />}
+            />
             <Route path="/logout" element={<Logout />} />
             <Route path="/not-found" element={<NotFound />} />
             <Route path="/" element={<Navigate to="/movies" />} />
@@ -58,4 +66,4 @@ class App extends Component {
   }
 }
 
-export default App;
+export default getHooks(App);
