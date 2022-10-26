@@ -122,10 +122,15 @@ class Movies extends Component {
     if (!allMovies.length)
       return (
         <div>
-          <p>There are no movies in the database.</p>
-          <Link to="/movies/new" className="btn btn-primary mb-4">
-            Add Movie
-          </Link>
+          <p>
+            There are no movies in the database.
+            {!user && "Please Login to add movie."}
+          </p>
+          {user && (
+            <Link to="/movies/new" className="btn btn-primary mb-4">
+              Add Movie
+            </Link>
+          )}
         </div>
       );
     return (

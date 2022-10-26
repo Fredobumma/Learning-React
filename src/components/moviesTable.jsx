@@ -1,8 +1,9 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
+import PropTypes from "prop-types";
 import Like from "./common/like";
 import Table from "./common/table";
-import PropTypes from "prop-types";
+import * as auth from "../services/authService";
 
 class MoviesTable extends Component {
   columns = [
@@ -37,11 +38,16 @@ class MoviesTable extends Component {
 
   render() {
     const { movies, sortColumn, onSort } = this.props;
+    const user = auth.getCurrentUser();
 
     return (
       <Table
         data={movies}
-        columns={this.columns}
+        columns={
+          user && user.isAdmin
+            ? this.columns
+            : this.columns.filter((column) => column.key !== "delete")
+        }
         sortColumn={sortColumn}
         onSort={onSort}
       />

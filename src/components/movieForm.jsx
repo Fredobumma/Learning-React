@@ -52,7 +52,7 @@ class MovieForm extends Form {
       this.setState({ data: this.mapToViewModel(existingMovie) });
     } catch (error) {
       toast.error("The movie with the given ID was not found.");
-      return setTimeout(() => navigate("/not-found", "replace"));
+      navigate("/not-found", "replace");
     }
   }
 
